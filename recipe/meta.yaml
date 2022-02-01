@@ -1,12 +1,11 @@
-{% set name = "jupyter-starters" %}
 {% set version = "1.0.2" %}
 
 package:
-  name: {{ name }}
+  name: jupyter-starters
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name.replace("-", "_") }}-{{ version }}.tar.gz
+  url: https://pypi.io/packages/source/j/jupyter-starters/jupyter_starters-{{ version }}.tar.gz
   sha256: 859df785ae3caeeadaed42b65a3b58ca896030d9b9ea09b1b62a3b589bf5968f
 
 build:
@@ -17,11 +16,11 @@ build:
 requirements:
   host:
     - pip
-    - python >=3.6
+    - python >=3.7
   run:
     - jupyter_client >=6.1.0
     - jupyterlab >=3,<4
-    - python >=3.6
+    - python >=3.7
 
 test:
   imports:
@@ -46,7 +45,7 @@ about:
   summary: Parametrized starter files and folders for Jupyter
   license: BSD-3-Clause
   license_file: LICENSE
-  doc_url: https://jupyterstarters.readthedocs.io 
+  doc_url: https://jupyterstarters.readthedocs.io
 
 extra:
   recipe-maintainers:
