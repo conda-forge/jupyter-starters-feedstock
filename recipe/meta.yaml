@@ -12,8 +12,8 @@ build:
   number: 0
   noarch: python
   script: {{ PYTHON }} -m pip install . -vv
-  entry_points:
     - jupyter-starters = jupyter_starters.app:main
+  entry_points:
 
 requirements:
   host:
@@ -25,11 +25,17 @@ requirements:
     - python >=3.7
 
 test:
+  requires:
+    - cookiecutter
   imports:
     - jupyter_starters
     - jupyter_starters.py_starters
   commands:
     - pip check
+    - jupyter-starters --version
+    - jupyter starters --version
+    - jupyter starters list --json
+    - jupyter starters list
     - jupyter labextension list
     - jupyter labextension list 1>labextensions 2>&1
     - cat labextensions | grep "jupyterlab-starters.*OK.*jupyter_starters"  # [unix]
