@@ -1,27 +1,28 @@
-{% set name = "jupyter-starters" %}
-{% set version = "1.0.2" %}
+{% set version = "1.1.0" %}
 
 package:
-  name: {{ name }}
+  name: jupyter-starters
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name.replace("-", "_") }}-{{ version }}.tar.gz
-  sha256: 859df785ae3caeeadaed42b65a3b58ca896030d9b9ea09b1b62a3b589bf5968f
+  url: https://pypi.io/packages/source/j/jupyter-starters/jupyter_starters-{{ version }}.tar.gz
+  sha256: a99b7ab2cfbabf554837322c52d6810f88b667f6fde8b6a6e124c6779dea1a7c
 
 build:
   number: 0
   noarch: python
   script: {{ PYTHON }} -m pip install . -vv
+  entry_points:
+    - jupyter-starters = jupyter_starters.app:main
 
 requirements:
   host:
     - pip
-    - python >=3.6
+    - python >=3.7
   run:
     - jupyter_client >=6.1.0
     - jupyterlab >=3,<4
-    - python >=3.6
+    - python >=3.7
 
 test:
   imports:
@@ -29,24 +30,42 @@ test:
     - jupyter_starters.py_starters
   commands:
     - pip check
+    # cli check
+    - jupyter-starters --version
+    - jupyter starters --version
+    - jupyter starters list --json
+    - jupyter starters list
+    # labextensions
     - jupyter labextension list
     - jupyter labextension list 1>labextensions 2>&1
-    - cat labextensions | grep "jupyterlab-starters.*OK.*jupyter_starters"  # [unix]
+    - cat labextensions | grep "jupyterlab-starters.*OK.*jupyter_starters"
+    # notebook classic serverextension
     - jupyter serverextension list
     - jupyter serverextension list 1>serverextensions 2>&1
-    - cat serverextensions | grep "jupyter_starters.*OK"  # [unix]
+    - cat serverextensions | grep "jupyter_starters.*OK"
+    # jupyter_server server extension
     - jupyter server extension list
     - jupyter server extension list 1>server_extensions 2>&1
-    - cat server_extensions | grep "jupyter_starters.*OK"  # [unix]
+    - cat server_extensions | grep "jupyter_starters.*OK"
+    # unit tests
+    - python -m pytest --pyargs jupyter_starters --script-launch-mode=subprocess --cov jupyter_starters --cov-report=term-missing:skip-covered --no-cov-on-fail --cov-fail-under=65
   requires:
+    - cookiecutter
+    - m2-grep  # [win]
     - pip
+    - pytest
+    - pytest-asyncio
+    - pytest-console-scripts
+    - pytest-cov
 
 about:
   home: https://github.com/deathbeds/jupyterlab-starters
   summary: Parametrized starter files and folders for Jupyter
   license: BSD-3-Clause
-  license_file: LICENSE
-  doc_url: https://jupyterstarters.readthedocs.io 
+  license_file:
+    - LICENSE
+    - src/jupyter_starters/labextension/static/third-party-licenses.json
+  doc_url: https://jupyterstarters.readthedocs.io
 
 extra:
   recipe-maintainers:
